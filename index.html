@@ -128,7 +128,36 @@ grid-template-columns:1fr;
 </head>
 
 <body>
+<body>
 
+<script>
+const password = "skyhome123";
+
+let userPass = prompt("Enter Password:");
+
+if (userPass !== password) {
+    document.body.innerHTML = `
+        <div style="
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+            font-family:Arial;
+            background:#111;
+            color:white;
+            flex-direction:column;
+        ">
+            <h1>Access Denied</h1>
+            <p>Wrong Password</p>
+        </div>
+    `;
+}
+</script>
+
+<header>
+<i class="fa-solid fa-house"></i>
+Sky Home Girls PG Hostel
+</header>
 <header>
 <i class="fa-solid fa-house"></i>
 Sky Home Girls PG Hostel
