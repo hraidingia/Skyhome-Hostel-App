@@ -324,7 +324,7 @@ padding-bottom:10px;
 <div class="login-box">
 <i class="fa-solid fa-lock"></i>
 <h2>Sky Home Girls PG</h2>
-<p>Enter password to access the system</p>
+<p>Enter password to access the system<br><small style="color:#aaa;">Default: <b>1234</b></small></p>
 <input type="password" id="loginPassword" placeholder="Enter Password" onkeydown="if(event.key==='Enter')login()">
 <button onclick="login()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
 <div id="loginError">❌ Incorrect password. Please try again.</div>
@@ -615,21 +615,27 @@ Sky Home Girls PG Hostel Management System
 <script>
 
 // ===== PASSWORD SYSTEM =====
-const DEFAULT_PASSWORD = 'skyhome123';
+const DEFAULT_PASSWORD = '1234';
+
+// Reset to default if no password set yet
+if(!localStorage.getItem('skyhome_password')){
+  localStorage.setItem('skyhome_password', DEFAULT_PASSWORD);
+}
 
 function getPassword(){
-return localStorage.getItem('skyhome_password') || DEFAULT_PASSWORD;
+  return localStorage.getItem('skyhome_password');
 }
 
 function login(){
-const entered = document.getElementById('loginPassword').value;
-if(entered === getPassword()){
-document.getElementById('loginOverlay').style.display = 'none';
-document.getElementById('loginError').style.display = 'none';
-document.getElementById('loginPassword').value = '';
-} else {
-document.getElementById('loginError').style.display = 'block';
-}
+  const entered = document.getElementById('loginPassword').value.trim();
+  const stored = getPassword();
+  if(entered === stored){
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('loginError').style.display = 'none';
+    document.getElementById('loginPassword').value = '';
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
 }
 
 function logout(){
@@ -652,30 +658,30 @@ document.getElementById('pwModal').classList.remove('active');
 }
 
 function changePassword(){
-const current = document.getElementById('currentPw').value;
-const newPw = document.getElementById('newPw').value;
-const confirm = document.getElementById('confirmPw').value;
-const errEl = document.getElementById('pwError');
+  const current = document.getElementById('currentPw').value.trim();
+  const newPw = document.getElementById('newPw').value.trim();
+  const confirmPw = document.getElementById('confirmPw').value.trim();
+  const errEl = document.getElementById('pwError');
 
-if(current !== getPassword()){
-errEl.textContent = '❌ Current password is incorrect.';
-errEl.style.display = 'block';
-return;
-}
-if(newPw.length < 4){
-errEl.textContent = '❌ New password must be at least 4 characters.';
-errEl.style.display = 'block';
-return;
-}
-if(newPw !== confirm){
-errEl.textContent = '❌ Passwords do not match.';
-errEl.style.display = 'block';
-return;
-}
+  if(current !== getPassword()){
+    errEl.textContent = '❌ Current password is incorrect.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if(newPw.length < 4){
+    errEl.textContent = '❌ New password must be at least 4 characters.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if(newPw !== confirmPw){
+    errEl.textContent = '❌ Passwords do not match.';
+    errEl.style.display = 'block';
+    return;
+  }
 
-localStorage.setItem('skyhome_password', newPw);
-closePwModal();
-showToast('✅ Password Changed Successfully!');
+  localStorage.setItem('skyhome_password', newPw);
+  closePwModal();
+  showToast('✅ Password Changed Successfully!');
 }
 
 // ===== SAVE TOAST =====
